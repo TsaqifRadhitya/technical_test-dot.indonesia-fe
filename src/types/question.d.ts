@@ -18,6 +18,7 @@ export type quizzGlobalState = {
     startTime?: Date
     score?: number
     current_question_number: number
+    status : string
     storeAnswer: (data: answerType) => void
     reset: () => void
     previewQuizCheck: () => boolean

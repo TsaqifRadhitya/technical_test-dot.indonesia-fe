@@ -1,77 +1,42 @@
 import { create } from "zustand"
-import type { answerType, questionType, quizzGlobalState } from "../types/question"
-import axios from "axios"
+import type { quizzGlobalState } from "../types/question"
+import { quizzService } from '../services/quizz.service';
 
-export const useQuestion = create<quizzGlobalState>((set) => {
-    const getSavedQuestions = (): questionType[] | undefined => {
-        const questions = localStorage.getItem("questions")
-        if (!questions) return undefined
-        try {
-            return JSON.parse(questions)
-        } catch {
-            return undefined
-        }
-    }
-
-    const getStoredAnswer = (): answerType[] | undefined => {
-        const answers = localStorage.getItem("answers")
-        if (!answers) return undefined
-        try {
-            return JSON.parse(answers)
-        } catch {
-            return undefined
-        }
-    }
-
-    const getStartTime = (): Date | undefined => {
-        const startTime = localStorage.getItem("start_time")
-        if (!startTime) return undefined
-        try {
-            return new Date(startTime)
-        } catch {
-            return undefined
-        }
-    }
-
-    const resetHandler = () => {
-        localStorage.removeItem("questions")
-        localStorage.removeItem("answers")
-        localStorage.removeItem("start_time")
-    }
-
-    const previewQuizCheck = (): boolean => {
-        return !!getSavedQuestions() && !!getStartTime() && !!getSavedQuestions()
-    }
+export const useQuizz = create<quizzGlobalState>((set) => {
+    const QuizzService = new quizzService()
     return {
-        answers: undefined,
+        answers: [],
         current_question_number: 1,
+        status: "not started",
         loadPrevieus: () => {
-            const savedQuestions = getSavedQuestions() as questionType[]
-            const storedAnswers = getStoredAnswer() as answerType[]
-            const previewStartTime = getStartTime() as Date
+            const { answers, questions, startTime, status, } = QuizzService.index()
             set({
-                answers: storedAnswers,
-                current_question_number: storedAnswers.length + 1,
-                questions: savedQuestions,
-                startTime: previewStartTime
+                answers: answers,
+                current_question_number: answers.length + 1,
+                questions: questions,
+                startTime: startTime,
+                status: status as string,
             })
         },
-        previewQuizCheck,
-        reset: () => {
-            resetHandler()
+        previewQuizCheck: QuizzService.prevQuizzCheck,
+        reset: async () => {
+            const questions = await QuizzService.init()
             set({
-                answers: undefined,
+                answers: [],
                 current_question_number: 1,
-                questions: undefined,
-                startTime: undefined
+                questions: questions,
+                startTime: QuizzService.start(),
+                status: "onprocess"
             })
         },
         storeAnswer: (data) => {
-            set((prev) => ({ ...prev, answers: prev.answers ? [...prev.answers, data] : [data] }))
+            set((prev) => {
+                QuizzService.storeAnswer(data)
+                return { ...prev, answers: prev.answers ? [...prev.answers, data] : [data] }
+            })
         },
         initialize: async () => {
-            const request = await axios.get("https://opentdb.com/api.php?amount=10")
-            const questions: questionType[] = request.data.results
+            const questions = await QuizzService.init()
             set({
                 questions: questions
             })
@@ -82,14 +47,17 @@ export const useQuestion = create<quizzGlobalState>((set) => {
                     const question = prev.questions?.find((data) => data.question === answer.question)
                     return question?.correct_answer === answer.question
                 })
+                QuizzService.finish()
                 return {
-                    score: (trueAnswer?.length ?? 0) / (prev.questions?.length ?? 0)
+                    score: (trueAnswer?.length ?? 0) / (prev.questions?.length ?? 0),
+                    status: "finish"
                 }
             })
         },
         start: () => {
             set({
-                startTime: new Date()
+                startTime: QuizzService.start(),
+                status: "onprocess"
             })
         }
     }
