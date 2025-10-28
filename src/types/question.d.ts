@@ -19,12 +19,13 @@ export type quizzGlobalState = {
     score?: number
     current_question_number: number
     status : "onprocess" | "finish" | "not started"
+    isLoading : boolean
     storeAnswer: (data: answerType) => void
     restart: () => Promise<void>
     reset: () => void
     previewQuizCheck: () => boolean
     loadPrevieus: () => void
-    initialize: () => void
+    initialize: () => Promise<void>
     start: () => void
     finish: () => void
 }

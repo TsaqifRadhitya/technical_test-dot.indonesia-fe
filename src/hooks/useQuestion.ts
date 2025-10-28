@@ -8,11 +8,14 @@ export const useQuizz = create<quizzGlobalState>((set) => {
         answers: [],
         current_question_number: 1,
         status: "not started",
+        isLoading: false,
         loadPrevieus: () => {
+            set({ isLoading: true })
             const { answers, questions, startTime, status, } = QuizzService.index()
             set({
+                isLoading: false,
                 answers: answers,
-                current_question_number: answers.length + 1,
+                current_question_number: questions.length === answers.length ? answers.length : answers.length + 1,
                 questions: questions,
                 startTime: startTime,
                 status: status as string as any,
@@ -20,8 +23,10 @@ export const useQuizz = create<quizzGlobalState>((set) => {
         },
         previewQuizCheck: () => QuizzService.prevQuizzCheck(),
         restart: async () => {
+            set({ isLoading: true })
             const questions = await QuizzService.init()
             set({
+                isLoading: false,
                 answers: [],
                 current_question_number: 1,
                 questions: questions,
@@ -43,13 +48,23 @@ export const useQuizz = create<quizzGlobalState>((set) => {
             setTimeout(() => {
                 set((prev) => {
                     QuizzService.storeAnswer(data)
-                    return { ...prev, answers: prev.answers ? [...prev.answers, data] : [data] }
+                    const { current_question_number, questions } = prev
+                    return { ...prev, current_question_number: questions?.length === current_question_number ? current_question_number : current_question_number + 1, answers: prev.answers ? [...prev.answers, data] : [data] }
                 })
             }, 500)
         },
         initialize: async () => {
+            set({
+                answers: [],
+                questions: undefined,
+                startTime: undefined,
+                current_question_number: 1,
+                status: "not started",
+                isLoading: true
+            })
             const questions = await QuizzService.init()
             set({
+                isLoading: false,
                 questions: questions
             })
         },

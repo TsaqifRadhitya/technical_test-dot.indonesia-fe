@@ -3,28 +3,12 @@ import { baseRepository } from "./base.repository";
 import type { answerType, questionType } from "@/types/question";
 
 export class quizzRepository extends baseRepository {
-    async intialize(retryCount = 0): Promise<questionType[]> {
-        try {
-            const response = await axios.get("https://opentdb.com/api.php?amount=10");
-            const questions: questionType[] = response.data.results;
-            if (!questions.length) {
-                if (retryCount < 3) {
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                    return await this.intialize(retryCount + 1);
-                }
-                throw new Error("Failed to fetch questions after multiple retries");
-            }
-            this.setQuestions(questions);
-            this.updateQuizzStatus("not started");
-            return questions;
-        } catch (error: any) {
-            if (error.response?.status === 429) {
-                console.warn("Too many requests — waiting before retrying...");
-                await new Promise(resolve => setTimeout(resolve, 5000));
-                return await this.intialize(retryCount + 1);
-            }
-            throw error;
-        }
+    async intialize(): Promise<questionType[]> {
+        const response = await axios.get("https://opentdb.com/api.php?amount=10");
+        const questions: questionType[] = response.data.results;
+        this.setQuestions(questions);
+        this.updateQuizzStatus("not started");
+        return questions;
     }
 
 

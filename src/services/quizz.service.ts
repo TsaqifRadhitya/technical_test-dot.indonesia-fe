@@ -4,6 +4,7 @@ export class quizzService {
     private quizzRepository = new quizzRepository()
 
     async init() {
+        this.reset()
         return await this.quizzRepository.intialize()
     }
 
@@ -21,8 +22,8 @@ export class quizzService {
     }
 
     prevQuizzCheck() {
-        const { answers, questions, startTime, status } = this.index()
-        const isAvailable = !!questions.length && !!answers.length && !!startTime && !!status
+        const { questions, startTime, status } = this.index()
+        const isAvailable = !!questions.length && !!startTime
         if (!isAvailable) {
             return false
         }

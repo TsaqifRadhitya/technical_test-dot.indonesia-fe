@@ -1,12 +1,12 @@
 import { useQuizz } from "@/hooks/useQuestion";
-import { useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { useNavigate } from "react-router";
 
 export default function ResultPage() {
   const { status, reset, restart } = useQuizz();
   const navigate = useNavigate();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     switch (status) {
       case "onprocess":
         navigate("/quizz");

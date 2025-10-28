@@ -1,33 +1,17 @@
 import MultipleChoice from "@/components/quiz/multiple-choice";
+import ProgressBar from "@/components/quiz/progress-bar";
 import QuestionBox from "@/components/quiz/question-box";
+import RestartQuizz from "@/components/quiz/restart-action";
+import Timer from "@/components/quiz/timer";
 import { useQuizz } from "@/hooks/useQuestion";
-import type { MultipleChoiceType } from "@/types/multiple-choice";
-import { shuffleArray } from "@/utils/shuffleItemt";
-import { useLayoutEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
-const randomOptionPlacemenet = (
-  option: string[],
-  type: "multiple" | "boolean"
-): MultipleChoiceType[] => {
-  switch (type) {
-    case "boolean":
-      return [
-        { display: "Benar", value: "True" },
-        { display: "Salah", value: "False" },
-      ];
-    case "multiple":
-      return shuffleArray<MultipleChoiceType>(
-        option.map<MultipleChoiceType>((q) => ({ display: q, value: q }))
-      );
-  }
-};
-
 export default function QuizzPage() {
-  const { status, storeAnswer, questions, current_question_number } =
+  const { status, questions, current_question_number, finish, isLoading } =
     useQuizz();
   const navigate = useNavigate();
-  useLayoutEffect(() => {
+  useEffect(() => {
     switch (status) {
       case "finish":
         navigate("/result");
@@ -38,19 +22,30 @@ export default function QuizzPage() {
     }
   }, []);
 
-  const data = questions?.[current_question_number - 1];
-  if (data) {
-    return (
-      <>
-        <QuestionBox question={data.question} />
-        <MultipleChoice
-          onChoose={(value) =>
-            storeAnswer({ answer: value, question: data.question })
-          }
-          options={randomOptionPlacemenet([...data.incorrect_answers,data.correct_answer],data.type)}
-          answer={data.correct_answer}
-        />
-      </>
-    );
-  }
+  useEffect(() => {
+    if (!!questions && current_question_number === questions?.length) {
+      finish();
+      navigate("/result");
+    }
+  }, [current_question_number]);
+
+  return (
+    <section className="pt-28 px-10 lg:px-32 flex flex-col gap-y-5 bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100 min-h-screen w-full">
+      {!isLoading && !!questions ? (
+        <>
+          <div className="flex justify-between items-center">
+            <Timer />
+            <RestartQuizz />
+          </div>
+          <ProgressBar />
+          <QuestionBox />
+          <MultipleChoice />
+        </>
+      ) : (
+        <div className="flex justify-end mt-1.5 items-center">
+          <RestartQuizz />
+        </div>
+      )}
+    </section>
+  );
 }

@@ -1,30 +1,26 @@
-import { useEffect, useLayoutEffect } from "react";
-import { Outlet, useNavigate } from "react-router";
+import { useEffect } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router";
 import BaseLayout from "./baseLayouts";
 import { useAuth } from "../../hooks/useAuth";
 import Navbar from "./components/Navbar";
 
 export default function AuthLayout() {
   const navigate = useNavigate();
-
+  const location = useLocation();
   const { isAuth } = useAuth();
 
   useEffect(() => {
-    if (isAuth) return;
-    navigate("/login");
-  }, []);
+    if (!isAuth) navigate("/login");
+  }, [isAuth, navigate]);
 
-  if (isAuth) {
-    return (
-      <BaseLayout>
-        <Navbar withCredential />
-        <Outlet />
-      </BaseLayout>
-    );
+  if (!isAuth) {
+    return null;
   }
+
   return (
-    <BaseLayout>
-      <></>
+    <BaseLayout key={location.pathname}>
+      <Navbar withCredential/>
+      <Outlet />
     </BaseLayout>
   );
 }
