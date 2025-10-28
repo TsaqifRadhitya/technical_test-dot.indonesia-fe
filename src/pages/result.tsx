@@ -9,7 +9,7 @@ export default function ResultPage() {
   useEffect(() => {
     switch (status) {
       case "onprocess":
-        navigate("/quizz");
+        navigate("/quiz");
         return;
       case "not started":
         navigate("/");

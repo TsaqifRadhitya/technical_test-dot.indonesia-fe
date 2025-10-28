@@ -6,13 +6,11 @@ import { Button } from "@/components/ui/button";
 
 export default function HomePage() {
   const [showModalResume, setShowModalResume] = useState<boolean>(false);
-  const { previewQuizCheck, initialize, loadPrevieus, start, questions,isLoading } =
-    useQuizz();
+  const {initialize, start, isLoading,status } = useQuizz();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (previewQuizCheck()) {
-      loadPrevieus();
+    if (status === "onprocess") {
       setShowModalResume(true);
     } else {
       initialize();
@@ -32,7 +30,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100 overflow-hidden">
+    <div className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden">
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
@@ -65,7 +63,7 @@ export default function HomePage() {
             onClick={handleStart}
             className="px-8 py-4 text-lg font-semibold rounded-xl shadow-md bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:shadow-lg hover:from-indigo-600 hover:to-blue-600 transition-all"
           >
-            {questions ? "Start New Quiz" : "Loading Questions..."}
+            {!isLoading ? "Start New Quiz" : "Loading Questions..."}
           </Button>
         </motion.div>
       </motion.div>

@@ -1,5 +1,5 @@
 import type { MultipleChoiceType } from "@/types/multiple-choice";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useQuizz } from "@/hooks/useQuestion";
@@ -13,8 +13,8 @@ const randomOptionPlacemenet = (
   switch (type) {
     case "boolean":
       return [
-        { display: "Benar", value: "True" },
-        { display: "Salah", value: "False" },
+        { display: "True", value: "True" },
+        { display: "False", value: "False" },
       ];
     case "multiple":
       return shuffleArray<MultipleChoiceType>(
@@ -41,10 +41,10 @@ export default function MultipleChoice() {
   }, [current_question_number]);
 
   if (data) {
-    const options = randomOptionPlacemenet(
+    const options = useMemo(()=>randomOptionPlacemenet(
       [...data.incorrect_answers, data.correct_answer],
       data.type
-    );
+    ),[current_question_number]);
 
     return (
       <div className="flex flex-col gap-3 w-full h-fit">

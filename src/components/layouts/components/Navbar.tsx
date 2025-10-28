@@ -6,7 +6,6 @@ import { useNavigate } from "react-router";
 
 const getIntialProfileName = (name: string): string => {
   if (name === "") return name;
-  console.log(name);
   const splittedChar = name.split(" ");
   if (splittedChar.length > 1) {
     return [splittedChar[0][0], splittedChar[1][0]].join("");
@@ -58,11 +57,11 @@ export const Profile = () => {
 
         <p
           className={cn(
-            "font-medium transition-colors",
+            "font-medium transition-colors font-semibold",
             isScrolled ? "text-blue-500" : "text-white"
           )}
         >
-          {Credential || "User123"}
+          {Credential}
         </p>
       </div>
       {open && (

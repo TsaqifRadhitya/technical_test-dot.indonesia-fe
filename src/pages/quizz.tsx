@@ -8,8 +8,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
 export default function QuizzPage() {
-  const { status, questions, current_question_number, finish, isLoading } =
-    useQuizz();
+  const { status, questions, current_question_number, finish, isLoading } = useQuizz();
   const navigate = useNavigate();
   useEffect(() => {
     switch (status) {
@@ -28,9 +27,8 @@ export default function QuizzPage() {
       navigate("/result");
     }
   }, [current_question_number]);
-
   return (
-    <section className="pt-28 px-10 lg:px-32 flex flex-col gap-y-5 bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100 min-h-screen w-full">
+    <section className="pt-28 px-10 lg:px-32 flex flex-col gap-y-5 min-h-screen w-full">
       {!isLoading && !!questions ? (
         <>
           <div className="flex justify-between items-center">
