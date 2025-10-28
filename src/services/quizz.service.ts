@@ -25,7 +25,7 @@ export class quizzService {
         const { questions, answers } = this.index()
         const trueAnswer = answers.filter((answer) => {
             const question = questions?.find((data) => data.question === answer.question)
-            return question?.correct_answer === answer.question
+            return question?.correct_answer === answer.answer
         })
         return (trueAnswer.length / questions.length) * 100
     }
