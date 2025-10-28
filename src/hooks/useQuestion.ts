@@ -72,13 +72,9 @@ export const useQuizz = create<quizzGlobalState>((set) => {
         },
         finish: () => {
             set((prev) => {
-                const trueAnswer = prev.answers?.filter((answer) => {
-                    const question = prev.questions?.find((data) => data.question === answer.question)
-                    return question?.correct_answer === answer.question
-                })
                 QuizzService.finish()
                 return {
-                    score: (trueAnswer?.length ?? 0) / (prev.questions?.length ?? 0),
+                    score: QuizzService.getScore(),
                     status: "finish"
                 }
             })
@@ -88,6 +84,21 @@ export const useQuizz = create<quizzGlobalState>((set) => {
                 startTime: QuizzService.start(),
                 status: "onprocess"
             })
+        },
+        quizResultCheck: () => {
+            if (QuizzService.resultQuizCheck()) {
+                const { answers, questions, startTime, status } = QuizzService.index()
+                set({
+                    answers: answers,
+                    current_question_number: questions.length,
+                    score: QuizzService.getScore(),
+                    status: status as quizStatus,
+                    questions: questions,
+                    startTime: startTime,
+                })
+                return true
+            }
+            return false
         }
     }
 })

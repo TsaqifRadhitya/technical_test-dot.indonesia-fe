@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface CountdownProps {
@@ -6,6 +6,7 @@ interface CountdownProps {
   durationMinutes?: number;
   className?: string;
   showRemaining?: boolean;
+  onFinish?: () => void;
 }
 
 const Countdown: React.FC<CountdownProps> = ({
@@ -13,17 +14,28 @@ const Countdown: React.FC<CountdownProps> = ({
   durationMinutes = 60,
   className,
   showRemaining = false,
+  onFinish,
 }) => {
-  const [timeLeft, setTimeLeft] = useState(0);
+  const target = useMemo(
+    () => new Date(startTime).getTime() + durationMinutes * 60 * 1000,
+    [durationMinutes, startTime]
+  );
+  const [timeLeft, setTimeLeft] = useState(Math.max(0, target - Date.now()));
 
   useEffect(() => {
-    const target = new Date(startTime).getTime() + durationMinutes * 60 * 1000;
+    if (timeLeft === 0) return;
     const interval = setInterval(() => {
       const diff = Math.max(0, target - Date.now());
       setTimeLeft(diff);
     }, 1000);
     return () => clearInterval(interval);
   }, [startTime, durationMinutes]);
+
+  useEffect(() => {
+    if (timeLeft === 0 && onFinish) {
+      onFinish();
+    }
+  }, [timeLeft]);
 
   const totalMinutes = Math.floor(timeLeft / 1000 / 60);
   const totalSeconds = Math.floor((timeLeft / 1000) % 60);

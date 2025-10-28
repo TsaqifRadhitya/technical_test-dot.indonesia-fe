@@ -21,6 +21,15 @@ export class quizzService {
         }
     }
 
+    getScore() {
+        const { questions, answers } = this.index()
+        const trueAnswer = answers.filter((answer) => {
+            const question = questions?.find((data) => data.question === answer.question)
+            return question?.correct_answer === answer.question
+        })
+        return (trueAnswer.length / questions.length) * 100
+    }
+
     prevQuizzCheck() {
         const { questions, startTime, status } = this.index()
         const isAvailable = !!questions.length && !!startTime
@@ -36,6 +45,11 @@ export class quizzService {
             return false
         }
         return true
+    }
+
+    resultQuizCheck() {
+        const { questions, startTime, status, answers } = this.index()
+        return (startTime && questions.length === answers.length && status === "finish")
     }
 
     getQuestions() {

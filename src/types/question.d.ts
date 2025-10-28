@@ -20,12 +20,13 @@ export type quizzGlobalState = {
     startTime?: Date
     score?: number
     current_question_number: number
-    status : quizStatus
-    isLoading : boolean
+    status: quizStatus
+    isLoading: boolean
     storeAnswer: (data: answerType) => void
     restart: () => Promise<void>
     reset: () => void
     initialize: () => Promise<void>
     start: () => void
     finish: () => void
+    quizResultCheck: () => boolean
 }

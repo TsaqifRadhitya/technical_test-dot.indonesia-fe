@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
 export default function QuizzPage() {
-  const { status, questions, current_question_number, finish, isLoading } = useQuizz();
+  const { status, questions, current_question_number, finish, isLoading,answers } = useQuizz();
   const navigate = useNavigate();
   useEffect(() => {
     switch (status) {
@@ -22,11 +22,11 @@ export default function QuizzPage() {
   }, []);
 
   useEffect(() => {
-    if (!!questions && current_question_number === questions?.length) {
+    if (!!questions && questions.length === answers?.length) {
       finish();
       navigate("/result");
     }
-  }, [current_question_number]);
+  }, [answers]);
   return (
     <section className="pt-28 px-10 lg:px-32 flex flex-col gap-y-5 min-h-screen w-full">
       {!isLoading && !!questions ? (

@@ -3,17 +3,19 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
 export default function ResultPage() {
-  const { status } = useQuizz();
+  const { status, quizResultCheck } = useQuizz();
   const navigate = useNavigate();
 
   useEffect(() => {
-    switch (status) {
-      case "onprocess":
-        navigate("/quiz");
-        return;
-      case "not started":
-        navigate("/");
-        return;
+    if (!quizResultCheck()) {
+      switch (status) {
+        case "onprocess":
+          navigate("/quiz");
+          return;
+        case "not started":
+          navigate("/");
+          return;
+      }
     }
   }, []);
 
