@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { Outlet, useNavigate } from "react-router";
 import BaseLayout from "./baseLayouts";
 import { useAuth } from "../../hooks/useAuth";
@@ -8,7 +8,7 @@ export default function AuthLayout() {
 
   const { isAuth } = useAuth();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isAuth) return;
     navigate("/login");
   }, [isAuth]);

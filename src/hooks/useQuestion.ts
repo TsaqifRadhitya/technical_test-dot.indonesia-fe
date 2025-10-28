@@ -15,11 +15,11 @@ export const useQuizz = create<quizzGlobalState>((set) => {
                 current_question_number: answers.length + 1,
                 questions: questions,
                 startTime: startTime,
-                status: status as string,
+                status: status as string as any,
             })
         },
         previewQuizCheck: QuizzService.prevQuizzCheck,
-        reset: async () => {
+        restart: async () => {
             const questions = await QuizzService.init()
             set({
                 answers: [],
@@ -29,11 +29,23 @@ export const useQuizz = create<quizzGlobalState>((set) => {
                 status: "onprocess"
             })
         },
-        storeAnswer: (data) => {
-            set((prev) => {
-                QuizzService.storeAnswer(data)
-                return { ...prev, answers: prev.answers ? [...prev.answers, data] : [data] }
+        reset: () => {
+            QuizzService.reset()
+            set({
+                answers: [],
+                questions: undefined,
+                current_question_number: 1,
+                status: "not started",
+                startTime: undefined
             })
+        },
+        storeAnswer: (data) => {
+            setTimeout(() => {
+                set((prev) => {
+                    QuizzService.storeAnswer(data)
+                    return { ...prev, answers: prev.answers ? [...prev.answers, data] : [data] }
+                })
+            }, 500)
         },
         initialize: async () => {
             const questions = await QuizzService.init()
