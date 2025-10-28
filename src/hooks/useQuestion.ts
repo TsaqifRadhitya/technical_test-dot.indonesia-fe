@@ -18,7 +18,7 @@ export const useQuizz = create<quizzGlobalState>((set) => {
                 status: status as string as any,
             })
         },
-        previewQuizCheck: QuizzService.prevQuizzCheck,
+        previewQuizCheck: () => QuizzService.prevQuizzCheck(),
         restart: async () => {
             const questions = await QuizzService.init()
             set({

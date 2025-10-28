@@ -3,19 +3,30 @@ import { baseRepository } from "./base.repository";
 import type { answerType, questionType } from "@/types/question";
 
 export class quizzRepository extends baseRepository {
-    async intialize(): Promise<questionType[]> {
-        const questions: [] = (await axios.get("https://opentdb.com/api.php?amount=10")).data.results
-        if (!questions.length) {
-            return await this.intialize()
+    async intialize(retryCount = 0): Promise<questionType[]> {
+        try {
+            const response = await axios.get("https://opentdb.com/api.php?amount=10");
+            const questions: questionType[] = response.data.results;
+            if (!questions.length) {
+                if (retryCount < 3) {
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    return await this.intialize(retryCount + 1);
+                }
+                throw new Error("Failed to fetch questions after multiple retries");
+            }
+            this.setQuestions(questions);
+            this.updateQuizzStatus("not started");
+            return questions;
+        } catch (error: any) {
+            if (error.response?.status === 429) {
+                console.warn("Too many requests — waiting before retrying...");
+                await new Promise(resolve => setTimeout(resolve, 5000));
+                return await this.intialize(retryCount + 1);
+            }
+            throw error;
         }
-        this.setQuestions(questions)
-        this.updateQuizzStatus("onprocess")
-        return questions
     }
 
-    storeStartTime(time: Date) {
-        this.setLocalStorage("start_time", time.toString())
-    }
 
     getStartTime(): Date | undefined {
         const startTime = this.getLocalStorage("start_time")
@@ -23,6 +34,10 @@ export class quizzRepository extends baseRepository {
             return undefined
         }
         return new Date(startTime)
+    }
+
+    storeStartTime(start_time: Date) {
+        this.setLocalStorage("start_time", start_time.toString())
     }
 
     deleteStartTime() {

@@ -7,9 +7,22 @@ export class quizzService {
         return await this.quizzRepository.intialize()
     }
 
+    index() {
+        const questions = this.getQuestions()
+        const answers = this.getAnswers()
+        const startTime = this.quizzRepository.getStartTime()
+        const status = this.quizzRepository.getQuizzStatus()
+        return {
+            questions,
+            answers,
+            status,
+            startTime
+        }
+    }
+
     prevQuizzCheck() {
         const { answers, questions, startTime, status } = this.index()
-        const isAvailable = !!answers.length && !!questions.length && !!answers.length && !!startTime && !!status
+        const isAvailable = !!questions.length && !!answers.length && !!startTime && !!status
         if (!isAvailable) {
             return false
         }
@@ -22,19 +35,6 @@ export class quizzService {
             return false
         }
         return true
-    }
-
-    index() {
-        const questions = this.getQuestions()
-        const answers = this.getAnswers()
-        const startTime = this.quizzRepository.getStartTime()
-        const status = this.quizzRepository.getQuizzStatus()
-        return {
-            questions,
-            answers,
-            status,
-            startTime
-        }
     }
 
     getQuestions() {

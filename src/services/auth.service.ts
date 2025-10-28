@@ -14,8 +14,8 @@ export class authService {
         if (!validate.success) {
             const error = validate.error.format()
             return {
-                password: error.password?._errors[0],
-                username: error.password?._errors[0]
+                username: error.username?._errors[0],
+                password: error.password?._errors[0]    
             }
         }
         this.authRepository.setCredential(validate.data.username)
