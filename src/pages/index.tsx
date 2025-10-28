@@ -65,7 +65,7 @@ export default function HomePage() {
             onClick={handleStart}
             className="px-8 py-4 text-lg font-semibold rounded-xl shadow-md bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:shadow-lg hover:from-indigo-600 hover:to-blue-600 transition-all"
           >
-            {!!questions ? "Start New Quiz" : "Loading Questions..."}
+            {questions ? "Start New Quiz" : "Loading Questions..."}
           </Button>
         </motion.div>
       </motion.div>

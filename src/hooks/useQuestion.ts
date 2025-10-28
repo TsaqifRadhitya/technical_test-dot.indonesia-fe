@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import type { quizzGlobalState } from "../types/question"
+import type { quizStatus, quizzGlobalState } from "../types/question"
 import { quizzService } from '../services/quizz.service';
 
 export const useQuizz = create<quizzGlobalState>((set) => {
@@ -18,7 +18,7 @@ export const useQuizz = create<quizzGlobalState>((set) => {
                 current_question_number: questions.length === answers.length ? answers.length : answers.length + 1,
                 questions: questions,
                 startTime: startTime,
-                status: status as string as any,
+                status: status as quizStatus,
             })
         },
         previewQuizCheck: () => QuizzService.prevQuizzCheck(),

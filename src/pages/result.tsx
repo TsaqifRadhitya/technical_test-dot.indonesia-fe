@@ -1,9 +1,9 @@
 import { useQuizz } from "@/hooks/useQuestion";
-import { useEffect, useLayoutEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
 export default function ResultPage() {
-  const { status, reset, restart } = useQuizz();
+  const { status } = useQuizz();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,15 +17,15 @@ export default function ResultPage() {
     }
   }, []);
 
-  const handleGoToHome = () => {
-    reset();
-    navigate("/");
-  };
+  // const handleGoToHome = () => {
+  //   reset();
+  //   navigate("/");
+  // };
 
-  const handleRestart = async () => {
-    await restart();
-    navigate("/quizz");
-  };
+  // const handleRestart = async () => {
+  //   await restart();
+  //   navigate("/quizz");
+  // };
 
   return <></>;
 }

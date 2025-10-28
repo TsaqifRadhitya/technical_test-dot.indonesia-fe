@@ -1,6 +1,6 @@
 import { Outlet, useLocation, useNavigate } from "react-router";
 import { useAuth } from "../../hooks/useAuth";
-import { useEffect, useLayoutEffect } from "react";
+import { useEffect } from "react";
 import BaseLayout from "./baseLayouts";
 import Navbar from "./components/Navbar";
 

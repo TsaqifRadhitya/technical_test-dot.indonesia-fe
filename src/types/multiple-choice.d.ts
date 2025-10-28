@@ -1,10 +1,10 @@
 export type MultipleChoiceProps = {
-    onChoose: (value: any) => void
+    onChoose: (value: string) => void
     options: MultipleChoiceType[]
-    answer : any
+    answer : string
 }
 
 export type MultipleChoiceType = {
     display: string
-    value: any
+    value: string
 }

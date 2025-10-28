@@ -12,13 +12,15 @@ export type answerType = {
     answer: string
 }
 
+export type quizStatus = "onprocess" | "finish" | "not started"
+
 export type quizzGlobalState = {
     questions?: questionType[]
     answers?: answerType[]
     startTime?: Date
     score?: number
     current_question_number: number
-    status : "onprocess" | "finish" | "not started"
+    status : quizStatus
     isLoading : boolean
     storeAnswer: (data: answerType) => void
     restart: () => Promise<void>

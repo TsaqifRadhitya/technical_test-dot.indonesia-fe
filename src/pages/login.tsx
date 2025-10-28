@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { useNavigate } from "react-router";
 import { User, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";

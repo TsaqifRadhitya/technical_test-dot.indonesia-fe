@@ -1,5 +1,5 @@
 import type { MultipleChoiceType } from "@/types/multiple-choice";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useQuizz } from "@/hooks/useQuestion";
@@ -41,13 +41,9 @@ export default function MultipleChoice() {
   }, [current_question_number]);
 
   if (data) {
-    const options = useMemo(
-      () =>
-        randomOptionPlacemenet(
-          [...data.incorrect_answers, data.correct_answer],
-          data.type
-        ),
-      [current_question_number]
+    const options = randomOptionPlacemenet(
+      [...data.incorrect_answers, data.correct_answer],
+      data.type
     );
 
     return (

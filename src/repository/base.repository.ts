@@ -9,8 +9,8 @@ export class baseRepository {
         return Cookies.remove(key, option)
     }
 
-    protected setCookie = (key: string, value: any, option?: Cookies.CookieAttributes): boolean => {
-        return !!Cookies.set(key, String(value), option)
+    protected setCookie = (key: string, value: string, option?: Cookies.CookieAttributes): boolean => {
+        return !!Cookies.set(key, value, option)
     }
 
     protected setLocalStorage(key: string, value: string) {

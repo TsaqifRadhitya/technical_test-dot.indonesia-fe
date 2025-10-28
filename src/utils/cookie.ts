@@ -8,6 +8,6 @@ export const removeCookie = (key: string, option?: Cookies.CookieAttributes) => 
     return Cookies.remove(key, option)
 }
 
-export const setCookie = (key: string, value: any, option?: Cookies.CookieAttributes): boolean => {
-    return !!Cookies.set(key, String(value), option)
+export const setCookie = (key: string, value: string, option?: Cookies.CookieAttributes): boolean => {
+    return !!Cookies.set(key, value, option)
 }
