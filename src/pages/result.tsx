@@ -113,15 +113,15 @@ export default function ResultPage() {
         )}
       </AnimatePresence>
       <motion.div
-        className="w-full h-[75vh] flex flex-col items-center justify-center"
+        className="w-full h-screen flex flex-col items-center justify-center"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.5, ease: "easeOut" }}
       >
-        <h1 className="text-3xl font-bold text-center mb-2 text-gray-800">
+        <h1 className="text-3xl md:text-5xl font-bold text-center mb-2 text-gray-800">
           {isTimeout ? "⏰ Time's Up!" : "🎉 Quiz Finished!"}
         </h1>
-        <p className="text-center text-gray-500 mb-6">
+        <p className="text-center text-gray-500 md:text-xl mb-6">
           {isTimeout
             ? "You ran out of time before finishing the quiz."
             : "Great job completing all questions!"}
@@ -133,12 +133,12 @@ export default function ResultPage() {
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.4 }}
         >
-          <h2 className="text-5xl font-bold text-blue-600 mb-2">{score}</h2>
-          <p className="text-gray-500">Your Final Score</p>
+          <h2 className="text-5xl md:text-7xl font-bold text-blue-600 mb-2">{score}</h2>
+          <p className="text-gray-500 md:text-lg text-center">Your Final Score</p>
         </motion.div>
 
         <motion.div
-          className="flex justify-center gap-4 mt-8"
+          className="flex justify-center gap-4 mt-8 flex-col lg:flex-row w-full max-w-lg"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
@@ -146,7 +146,7 @@ export default function ResultPage() {
           <Button
             disabled={isLoading}
             onClick={handleRestart}
-            className="bg-blue-600 text-white hover:bg-blue-700"
+            className="bg-blue-600 text-white hover:bg-blue-700 md:text-xl flex-1"
           >
             {isLoading && <Spinner />}
             Restart Quiz
@@ -155,6 +155,7 @@ export default function ResultPage() {
             disabled={isLoading}
             variant="secondary"
             onClick={handleGoToHome}
+            className="md:text-xl flex-1"
           >
             Back to Home
           </Button>
@@ -179,7 +180,7 @@ export default function ResultPage() {
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 1.1, duration: 0.4 }}
-          className="aspect-video w-full flex-1 flex flex-col items-center justify-center rounded-2xl border-2 border-chart-2 bg-chart-2/50 shadow-sm"
+          className="aspect-video w-full flex-1 flex flex-col items-center justify-center rounded-2xl border border-chart-2 bg-chart-2/10 shadow-sm"
         >
           <h2 className="text-5xl font-bold text-chart-2">{correctCount}</h2>
           <p className="text-gray-700 font-semibold mt-2">Correct</p>
@@ -192,7 +193,7 @@ export default function ResultPage() {
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 1.5, duration: 0.4 }}
-          className="aspect-video w-full flex-1 flex flex-col items-center justify-center rounded-2xl border-2 border-destructive bg-destructive/50 shadow-sm"
+          className="aspect-video w-full flex-1 flex flex-col items-center justify-center rounded-2xl border border-destructive bg-destructive/10 shadow-sm"
         >
           <h2 className="text-5xl font-bold text-destructive">
             {(questions?.length ?? 0) - correctCount}
@@ -205,7 +206,7 @@ export default function ResultPage() {
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 1.9, duration: 0.4 }}
-          className="aspect-video flex-1 w-full flex flex-col items-center justify-center rounded-2xl border-2 border-primary bg-primary/50 shadow-sm"
+          className="aspect-video flex-1 w-full flex flex-col items-center justify-center rounded-2xl border border-primary bg-primary/10 shadow-sm"
         >
           <h2 className="text-5xl font-bold text-primary">
             {questions?.length}
