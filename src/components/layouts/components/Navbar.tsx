@@ -4,6 +4,7 @@ import { useQuizz } from "@/hooks/useQuestion";
 import { cn } from "@/lib/utils";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
+import AnyQuizIcon from "../../../assets/Any Quiz Icon.svg";
 
 const getIntialProfileName = (name: string): string => {
   if (name === "") return name;
@@ -42,7 +43,7 @@ export const Profile = () => {
   };
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className="relative text-lg">
       <div
         className="flex items-center gap-2 cursor-pointer select-none"
         onPointerEnter={() => setOpen(true)}
@@ -50,11 +51,11 @@ export const Profile = () => {
       >
         <h1
           className={cn(
-            "flex items-center justify-center h-10 aspect-square rounded-full ring ring-blue-500 font-semibold text-sm leading-none transition-colors",
+            "flex items-center justify-center h-10 text-base aspect-square rounded-full ring ring-blue-500 font-semibold leading-none transition-colors",
             isScrolled ? "bg-blue-500 text-white" : "bg-white text-blue-600"
           )}
         >
-          {getIntialProfileName(Credential as string)}
+          {getIntialProfileName(Credential as string).toLocaleUpperCase()}
         </h1>
 
         <p
@@ -99,10 +100,11 @@ export default function Navbar({
   withCredential?: boolean;
 }) {
   return (
-    <nav className="w-full fixed top-0 shadow px-10 lg:px-32 py-3 bg-white flex justify-between items-center z-[999]">
-      <h1 className="text-2xl font-bold">
-        <span className="text-blue-500 text-2.5xl">ANY</span>Quiz
-      </h1>
+    <nav className="w-full fixed top-0 shadow px-10 lg:px-32 py-2.5 bg-white flex justify-between items-center z-[999]">
+      <div className="flex items-center gap-1">
+        <img className="max-w-12" src={AnyQuizIcon} />
+        <h1 className="text-2xl font-black">Quiz</h1>
+      </div>
       {withCredential && <Profile />}
     </nav>
   );

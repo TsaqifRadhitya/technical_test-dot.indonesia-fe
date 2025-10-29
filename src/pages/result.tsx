@@ -210,7 +210,7 @@ export default function ResultPage() {
                 <p className="text-sm text-gray-600">
                   Correct:{" "}
                   <span className="font-semibold text-green-700">
-                    {q.correct_answer}
+                    {sanitizeText(q.correct_answer)}
                   </span>
                 </p>
               )}
