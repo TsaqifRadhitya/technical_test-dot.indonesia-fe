@@ -160,9 +160,27 @@ export default function ResultPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.7, duration: 0.4 }}
       >
+        Quiz Result Detail
+      </motion.h1>
+      <motion.div
+        className="w-full h-px bg-primary mb-10"
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{ delay: 0.8, duration: 0.4 }}
+      />
+      <div className="flex flex-col lg:flex-row items-center lg:justify-between">
+        <motion.div className="aspect-square flex-1"></motion.div>
+        <motion.div className="aspect-square flex-1"></motion.div>
+        <motion.div className="aspect-square flex-1"></motion.div>
+      </div>
+      <motion.h1
+        className="w-full mb-1 text-primary font-bold text-2xl"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.7, duration: 0.4 }}
+      >
         Your Answers
       </motion.h1>
-
       <motion.div
         className="w-full h-px bg-primary mb-10"
         initial={{ scaleX: 0 }}

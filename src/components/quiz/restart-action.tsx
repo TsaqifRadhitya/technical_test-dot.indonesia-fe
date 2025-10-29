@@ -3,9 +3,9 @@ import { RotateCcwIcon } from "lucide-react";
 import { useQuizz } from "../../hooks/useQuestion";
 import { Spinner } from "../ui/spinner";
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { memo, useState } from "react";
 
-export default function RestartQuizz() {
+export default memo(function RestartQuizz() {
   const { restart, isLoading } = useQuizz();
   const [isOpen, setOpen] = useState(false);
 
@@ -17,7 +17,7 @@ export default function RestartQuizz() {
   return (
     <>
       <AnimatePresence>
-        {isOpen && (
+        {(isOpen || isLoading) && (
           <motion.div
             className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
             initial={{ opacity: 0 }}
@@ -90,4 +90,4 @@ export default function RestartQuizz() {
       </motion.div>
     </>
   );
-}
+})

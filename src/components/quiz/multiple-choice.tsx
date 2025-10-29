@@ -54,7 +54,6 @@ export default function MultipleChoice() {
       {options.map((opt, idx) => {
         const isSelected = chosen === opt.value;
         const isCorrect = opt.value === data!.correct_answer;
-
         return (
           <motion.button
             key={idx}
