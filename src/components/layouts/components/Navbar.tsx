@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { useQuizz } from "@/hooks/useQuestion";
 import { cn } from "@/lib/utils";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
@@ -18,10 +19,10 @@ export const Profile = () => {
   const ref = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const { Credential, Logout } = useAuth();
+  const { reset } = useQuizz();
 
   const isScrolled = true;
 
-  // Tutup dropdown jika klik di luar elemen
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) {
@@ -34,6 +35,7 @@ export const Profile = () => {
 
   const handleLogout = () => {
     if (Logout()) {
+      reset();
       navigate("/login");
       setOpen(false);
     }
