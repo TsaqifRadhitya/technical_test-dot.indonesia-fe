@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import AnyQuizIcon from "../../../assets/Any Quiz Icon.svg";
 import { AnimatePresence, motion } from "framer-motion";
-import { LogInIcon, LucideLogOut } from "lucide-react";
+import { LogOutIcon } from "lucide-react";
 
 const getIntialProfileName = (name: string): string => {
   if (name === "") return name;
@@ -90,7 +90,7 @@ export const Profile = () => {
                   variant="ghost"
                   className="w-full rounded-none justify-start px-4 py-3 text-destructive hover:bg-destructive/10 hover:text-destructive transition"
                 >
-                  <LogInIcon /> Logout
+                  <LogOutIcon /> Logout
                 </Button>
               </li>
             </ul>
