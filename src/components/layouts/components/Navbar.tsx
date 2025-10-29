@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import AnyQuizIcon from "../../../assets/Any Quiz Icon.svg";
+import { AnimatePresence, motion } from "framer-motion";
+import { LogInIcon, LucideLogOut } from "lucide-react";
 
 const getIntialProfileName = (name: string): string => {
   if (name === "") return name;
@@ -21,8 +23,6 @@ export const Profile = () => {
   const navigate = useNavigate();
   const { Credential, Logout } = useAuth();
   const { reset } = useQuizz();
-
-  const isScrolled = true;
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -43,53 +43,60 @@ export const Profile = () => {
   };
 
   return (
-    <div ref={ref} className="relative text-lg">
+    <div ref={ref} className="relative text-lg select-none">
       <div
-        className="flex items-center gap-2 cursor-pointer select-none"
-        onPointerEnter={() => setOpen(true)}
+        className="flex items-center gap-2 cursor-pointer group"
         onClick={() => setOpen(!open)}
       >
-        <h1
+        <motion.div
           className={cn(
-            "flex items-center justify-center h-10 text-base aspect-square rounded-full ring ring-blue-500 font-semibold leading-none transition-colors",
-            isScrolled ? "bg-blue-500 text-white" : "bg-white text-blue-600"
+            "flex items-center justify-center h-10 w-10 rounded-full font-semibold ring-2 ring-primary/40 bg-primary text-white shadow-sm transition-transform"
           )}
+          whileTap={{ scale: 0.95 }}
         >
           {getIntialProfileName(Credential as string).toLocaleUpperCase()}
-        </h1>
+        </motion.div>
 
-        <p
+        <motion.p
           className={cn(
-            "font-medium transition-colors font-semibold",
-            isScrolled ? "text-blue-500" : "text-white"
+            "hidden lg:block font-medium text-gray-700 group-hover:text-primary transition-colors"
           )}
         >
           {Credential}
-        </p>
+        </motion.p>
       </div>
-      {open && (
-        <div
-          className={cn(
-            "absolute mt-3.5 w-44 rounded-lg bg-white shadow-lg pt-5 overflow-hidden animate-fade-in",
-            "-right-5 lg:left-0 lg:-right-auto"
-          )}
-        >
-          <div className="h-px bg-gray-200 mt-1" />
-          <ul className="flex flex-col text-sm text-gray-500">
-            <li>
-              <Button
-                onClick={handleLogout}
-                variant="destructive"
-                className={cn(
-                  "w-full rounded-none px-4 py-2 bg-white text-destructive hover:bg-destructive hover:text-white transition"
-                )}
-              >
-                Logout
-              </Button>
-            </li>
-          </ul>
-        </div>
-      )}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            className={cn(
+              "absolute mt-3 rounded-xl border border-gray-100 bg-white/80 backdrop-blur-md shadow-xl overflow-hidden z-50",
+              "-right-2 lg:left-0 lg:-right-auto"
+            )}
+            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+          >
+            <div className="px-4 py-3 border-b border-gray-100">
+              <p className="text-sm font-semibold text-gray-700">
+                {Credential}
+              </p>
+              <p className="text-xs text-gray-400">Logged in</p>
+            </div>
+            <ul className="text-sm">
+              <li>
+                <Button
+                  onClick={handleLogout}
+                  variant="ghost"
+                  className="w-full rounded-none justify-start px-4 py-3 text-destructive hover:bg-destructive/10 hover:text-destructive transition"
+                >
+                  <LogInIcon /> Logout
+                </Button>
+              </li>
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
@@ -102,9 +109,16 @@ export default function Navbar({
   return (
     <nav className="w-full fixed top-0 shadow px-10 lg:px-32 py-2.5 bg-white flex justify-between items-center z-[999]">
       <div className="flex items-center gap-1">
-        <img className="max-w-12" src={AnyQuizIcon} />
-        <h1 className="text-2xl font-black">Quiz</h1>
+        <div className="flex items-center gap-1">
+          <img className="max-w-12" src={AnyQuizIcon} />
+          <h1 className="text-2xl font-black">Quiz</h1>
+        </div>
+        {"|"}
+        <p className="text-sm text-muted-foreground font-medium">
+          Challenge yourself today 🚀
+        </p>
       </div>
+
       {withCredential && <Profile />}
     </nav>
   );

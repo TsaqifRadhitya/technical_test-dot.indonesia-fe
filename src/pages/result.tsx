@@ -49,6 +49,12 @@ export default function ResultPage() {
     navigate("/quiz");
   };
 
+  const correctCount =
+    answers?.filter((a) => {
+      const q = questions?.find((q) => q.question === a.question);
+      return q && a.answer === q.correct_answer;
+    }).length ?? 0;
+
   return (
     <motion.section
       className="px-10 lg:px-32 pb-10 lg:pb-20 min-h-screen flex flex-col items-center"
@@ -168,16 +174,53 @@ export default function ResultPage() {
         animate={{ scaleX: 1 }}
         transition={{ delay: 0.8, duration: 0.4 }}
       />
-      <div className="flex flex-col lg:flex-row items-center lg:justify-between">
-        <motion.div className="aspect-square flex-1"></motion.div>
-        <motion.div className="aspect-square flex-1"></motion.div>
-        <motion.div className="aspect-square flex-1"></motion.div>
+      <div className="flex flex-col lg:flex-row items-center lg:justify-between w-full gap-5">
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 1.1, duration: 0.4 }}
+          className="aspect-video w-full flex-1 flex flex-col items-center justify-center rounded-2xl border-2 border-chart-2 bg-chart-2/50 shadow-sm"
+        >
+          <h2 className="text-5xl font-bold text-chart-2">{correctCount}</h2>
+          <p className="text-gray-700 font-semibold mt-2">Correct</p>
+          <p className="text-sm text-gray-500 mt-1">
+            You nailed these questions!
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 1.5, duration: 0.4 }}
+          className="aspect-video w-full flex-1 flex flex-col items-center justify-center rounded-2xl border-2 border-destructive bg-destructive/50 shadow-sm"
+        >
+          <h2 className="text-5xl font-bold text-destructive">
+            {(questions?.length ?? 0) - correctCount}
+          </h2>
+          <p className="text-gray-700 font-semibold mt-2">Incorrect</p>
+          <p className="text-sm text-gray-500 mt-1">Better luck next time!</p>
+        </motion.div>
+
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 1.9, duration: 0.4 }}
+          className="aspect-video flex-1 w-full flex flex-col items-center justify-center rounded-2xl border-2 border-primary bg-primary/50 shadow-sm"
+        >
+          <h2 className="text-5xl font-bold text-primary">
+            {questions?.length}
+          </h2>
+          <p className="text-gray-700 font-semibold mt-2">Total</p>
+          <p className="text-sm text-gray-500 mt-1">
+            Overall questions in this quiz
+          </p>
+        </motion.div>
       </div>
       <motion.h1
-        className="w-full mb-1 text-primary font-bold text-2xl"
+        className="w-full mb-1 text-primary font-bold text-2xl mt-10"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.7, duration: 0.4 }}
+        transition={{ delay: 2.2, duration: 0.4 }}
       >
         Your Answers
       </motion.h1>
@@ -185,7 +228,7 @@ export default function ResultPage() {
         className="w-full h-px bg-primary mb-10"
         initial={{ scaleX: 0 }}
         animate={{ scaleX: 1 }}
-        transition={{ delay: 0.8, duration: 0.4 }}
+        transition={{ delay: 2.3, duration: 0.4 }}
       />
 
       <div className="space-y-4 w-full">
@@ -199,7 +242,7 @@ export default function ResultPage() {
               key={idx}
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1 + idx * 0.05, duration: 0.3 }}
+              transition={{ delay: 2.7 + idx * 0.05, duration: 0.3 }}
               onClick={() =>
                 setDetailResult({ ...q, answer: userAnswer as string })
               }
