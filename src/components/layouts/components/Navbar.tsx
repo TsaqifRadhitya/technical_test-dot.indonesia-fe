@@ -107,7 +107,7 @@ export default function Navbar({
   withCredential?: boolean;
 }) {
   return (
-    <nav className="w-full fixed top-0 shadow px-10 lg:px-32 py-2.5 bg-white flex justify-between items-center z-[999]">
+    <nav className="w-full fixed top-0 shadow px-10 lg:px-32 py-2.5 bg-white flex justify-between items-center z-99">
       <div className="flex items-center gap-1">
         <div className="flex items-center gap-1">
           <img className="max-w-12" src={AnyQuizIcon} />
