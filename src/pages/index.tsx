@@ -3,10 +3,11 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function HomePage() {
   const [showModalResume, setShowModalResume] = useState<boolean>(false);
-  const {initialize, start, isLoading,status } = useQuizz();
+  const { initialize, start, isLoading, status } = useQuizz();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -63,7 +64,7 @@ export default function HomePage() {
             onClick={handleStart}
             className="px-8 py-4 text-lg font-semibold rounded-xl shadow-md bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:shadow-lg hover:from-indigo-600 hover:to-blue-600 transition-all"
           >
-            {!isLoading ? "Start New Quiz" : "Loading Questions..."}
+            {isLoading ? <><Spinner /> Loading Questions...</> : "Start New Quiz"}
           </Button>
         </motion.div>
       </motion.div>

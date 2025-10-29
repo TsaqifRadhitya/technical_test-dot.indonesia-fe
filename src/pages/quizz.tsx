@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
 export default function QuizzPage() {
-  const { status, questions, current_question_number, finish, isLoading,answers } = useQuizz();
+  const { status, questions, finish, isLoading, answers } = useQuizz();
   const navigate = useNavigate();
   useEffect(() => {
     switch (status) {

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { motion } from "framer-motion";
 import { User, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,7 +26,8 @@ export default function LoginPage() {
   const [error, setError] = useState<zodErrorType<typeof loginValidator>>();
   const navigate = useNavigate();
 
-  const loginHandler = () => {
+  const loginHandler = (e?: React.FormEvent) => {
+    e?.preventDefault();
     setError(undefined);
     const loginResponse = Login(data);
     if (!loginResponse) {
@@ -36,71 +38,107 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center px-4">
-      <div>
-        <Card className="w-[380px] shadow-xl border-0 backdrop-blur-lg bg-white/80">
-          <CardHeader className="text-center space-y-1">
-            <CardTitle className="text-3xl font-bold text-primary">
-              Welcome Back
-            </CardTitle>
-            <p className="text-muted-foreground text-sm">
-              Please login to continue
-            </p>
-          </CardHeader>
-
-          <CardContent className="flex flex-col gap-4">
-            <div className="flex flex-col gap-1">
-              <Label htmlFor="username">Username</Label>
-              <div className="relative">
-                <User className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  id="username"
-                  value={data.username}
-                  onChange={(e) =>
-                    setData((prev) => ({ ...prev, username: e.target.value }))
-                  }
-                  placeholder="Enter your username"
-                  className="pl-9"
-                />
-              </div>
-              {error?.username && (
-                <Label className="text-destructive text-sm">
-                  {error.username}
-                </Label>
-              )}
-            </div>
-            <div className="flex flex-col gap-1">
-              <Label htmlFor="password">Password</Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  id="password"
-                  type="password"
-                  value={data.password}
-                  onChange={(e) =>
-                    setData((prev) => ({ ...prev, password: e.target.value }))
-                  }
-                  placeholder="Enter your password"
-                  className="pl-9"
-                />
-              </div>
-              {error?.password && (
-                <Label className="text-destructive text-sm">
-                  {error.password}
-                </Label>
-              )}
-            </div>
-          </CardContent>
-          <CardFooter className="flex flex-col gap-2">
-            <Button
-              className="w-full font-semibold text-base transition-all hover:scale-[1.02] active:scale-95"
-              onClick={loginHandler}
-            >
-              Login
-            </Button>
-          </CardFooter>
+    <motion.div
+      className="min-h-screen w-full flex items-center justify-center px-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 30, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="w-full flex justify-center"
+      >
+        <Card className="w-full max-w-sm shadow-xl border-0 backdrop-blur-lg bg-white/80">
+          <form onSubmit={loginHandler}>
+            <CardHeader className="text-center space-y-1">
+              <CardTitle className="text-3xl font-bold text-primary">
+                Welcome Back
+              </CardTitle>
+              <motion.p
+                className="text-muted-foreground text-sm"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.4 }}
+              >
+                Please login to continue
+              </motion.p>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-4 mt-5">
+              {[
+                {
+                  id: "username",
+                  label: "Username",
+                  icon: User,
+                  type: "text",
+                  value: data.username,
+                  placeholder: "Enter your username",
+                  error: error?.username,
+                  onChange: (v: string) =>
+                    setData((prev) => ({ ...prev, username: v })),
+                },
+                {
+                  id: "password",
+                  label: "Password",
+                  icon: Lock,
+                  type: "password",
+                  value: data.password,
+                  placeholder: "Enter your password",
+                  error: error?.password,
+                  onChange: (v: string) =>
+                    setData((prev) => ({ ...prev, password: v })),
+                },
+              ].map((field, index) => (
+                <motion.div
+                  key={field.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    delay: 0.3 + index * 0.1,
+                    duration: 0.4,
+                    ease: "easeOut",
+                  }}
+                  className="flex flex-col gap-1"
+                >
+                  <Label htmlFor={field.id}>{field.label}</Label>
+                  <div className="relative">
+                    <field.icon className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      id={field.id}
+                      type={field.type}
+                      value={field.value}
+                      onChange={(e) => field.onChange(e.target.value)}
+                      placeholder={field.placeholder}
+                      className="pl-9"
+                    />
+                  </div>
+                  {field.error && (
+                    <Label className="text-destructive text-sm">
+                      {field.error}
+                    </Label>
+                  )}
+                </motion.div>
+              ))}
+            </CardContent>
+            <CardFooter className="flex flex-col gap-2 mt-5">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.6, duration: 0.4, ease: "easeOut" }}
+                className="w-full"
+              >
+                <Button
+                  type="submit"
+                  className="w-full font-semibold text-base transition-all hover:scale-[1.02] active:scale-95"
+                >
+                  Login
+                </Button>
+              </motion.div>
+            </CardFooter>
+          </form>
         </Card>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

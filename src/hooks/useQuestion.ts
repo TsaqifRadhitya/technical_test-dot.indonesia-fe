@@ -71,12 +71,10 @@ export const useQuizz = create<quizzGlobalState>((set) => {
             })
         },
         finish: () => {
-            set((prev) => {
-                QuizzService.finish()
-                return {
-                    score: QuizzService.getScore(),
-                    status: "finish"
-                }
+            QuizzService.finish()
+            set({
+                score: QuizzService.getScore(),
+                status: "finish"
             })
         },
         start: () => {
