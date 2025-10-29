@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { User, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -113,11 +113,21 @@ export default function LoginPage() {
                       className="pl-9"
                     />
                   </div>
-                  {field.error && (
-                    <Label className="text-destructive text-sm">
-                      {field.error}
-                    </Label>
-                  )}
+                  <AnimatePresence mode="wait">
+                    {field.error && (
+                      <motion.div
+                        key={field.id + "-error"}
+                        initial={{ opacity: 0, y: -5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -5 }}
+                        transition={{ duration: 0.25, ease: "easeOut" }}
+                      >
+                        <Label className="text-destructive text-sm">
+                          {field.error}
+                        </Label>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </motion.div>
               ))}
             </CardContent>
