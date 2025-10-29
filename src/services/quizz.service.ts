@@ -1,11 +1,17 @@
-import type { answerType } from '@/types/question';
+import type { answerType, questionType } from '@/types/question';
 import { quizzRepository } from '../repository/quizz.repository';
 export class quizzService {
     private quizzRepository = new quizzRepository()
 
-    async init() {
+    async init(): Promise<questionType[]> {
         this.reset()
-        return await this.quizzRepository.intialize()
+        try {
+            const data = await this.quizzRepository.intialize()
+            return data
+        } catch {
+            await new Promise(resolve => setTimeout(resolve, 1000))
+            return await this.init()
+        }
     }
 
     index() {

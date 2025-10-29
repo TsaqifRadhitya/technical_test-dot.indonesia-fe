@@ -6,6 +6,7 @@ export class quizzRepository extends baseRepository {
     async intialize(): Promise<questionType[]> {
         const response = await axios.get("https://opentdb.com/api.php?amount=10");
         const questions: questionType[] = response.data.results;
+        if (questions.length === 0) return Promise.reject()
         this.setQuestions(questions);
         this.updateQuizzStatus("not started");
         return questions;
