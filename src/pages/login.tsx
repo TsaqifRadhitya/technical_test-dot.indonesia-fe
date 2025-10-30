@@ -16,9 +16,11 @@ import { useAuth } from "@/hooks/useAuth";
 import type { zodErrorType } from "@/types/zod-error";
 import type { loginValidator } from "@/validators/auth.validator";
 import type z from "zod";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function LoginPage() {
   const { Login } = useAuth();
+  const [isloading, setLoading] = useState<boolean>();
   const [data, setData] = useState<z.infer<typeof loginValidator>>({
     password: "",
     username: "",
@@ -26,13 +28,18 @@ export default function LoginPage() {
   const [error, setError] = useState<zodErrorType<typeof loginValidator>>();
   const navigate = useNavigate();
 
-  const loginHandler = (e?: React.FormEvent) => {
+  console.log(isloading)
+
+  const loginHandler = async (e?: React.FormEvent) => {
     e?.preventDefault();
+    setLoading(true);
     setError(undefined);
-    const loginResponse = Login(data);
+    const loginResponse = await Login(data);
     if (!loginResponse) {
+      setLoading(false);
       navigate("/");
     } else {
+      setLoading(false);
       setError(loginResponse);
     }
   };
@@ -140,9 +147,10 @@ export default function LoginPage() {
               >
                 <Button
                   type="submit"
+                  disabled={isloading}
                   className="w-full font-semibold text-base transition-all hover:scale-[1.02] active:scale-95"
                 >
-                  Login
+                  {isloading && <Spinner />} Login
                 </Button>
               </motion.div>
             </CardFooter>

@@ -7,17 +7,20 @@ export const useAuth = create<globalStateAuth>((set) => {
     const AuthService = new authService()
     return {
         isAuth: !!getCookie("credential"),
-        Login: (data) => {
+        Login: async (data) => {
             const validate = AuthService.login(data)
+            await new Promise((resove) => setTimeout(() => resove(undefined), 600))
             if (validate) return validate
+            await new Promise((resove) => setTimeout(() => resove(undefined), 400))
             set((prev) => ({
                 ...prev,
                 isAuth: true,
                 Credential: data.username
             }))
         },
-        Logout: () => {
+        Logout: async () => {
             const authCheck = AuthService.logout()
+            await new Promise((resove) => setTimeout(() => resove(undefined), 600))
             if (!authCheck) return false
             removeCookie("credential")
             set((prev) => ({ ...prev, isAuth: false, Credential: undefined }))

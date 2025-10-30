@@ -7,6 +7,7 @@ import { useNavigate } from "react-router";
 import AnyQuizIcon from "../../../assets/Any Quiz Icon.svg";
 import { AnimatePresence, motion } from "framer-motion";
 import { LogOutIcon } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 
 const getIntialProfileName = (name: string): string => {
   if (name === "") return name;
@@ -23,6 +24,7 @@ export const Profile = () => {
   const navigate = useNavigate();
   const { Credential, Logout } = useAuth();
   const { reset } = useQuizz();
+  const [isloading, setLoading] = useState<boolean>();
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -34,12 +36,16 @@ export const Profile = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleLogout = () => {
-    if (Logout()) {
+  const handleLogout = async () => {
+    setLoading(true);
+    if (await Logout()) {
       reset();
-      navigate("/login");
       setOpen(false);
+      setLoading(false);
+      navigate("/login");
+      return;
     }
+    setLoading(false);
   };
 
   return (
@@ -87,10 +93,11 @@ export const Profile = () => {
               <li>
                 <Button
                   onClick={handleLogout}
+                  disabled={isloading}
                   variant="ghost"
                   className="w-full rounded-none justify-start px-4 py-3 text-destructive hover:bg-destructive/10 hover:text-destructive transition"
                 >
-                  <LogOutIcon /> Logout
+                  {isloading ? <Spinner /> : <LogOutIcon />} Logout
                 </Button>
               </li>
             </ul>

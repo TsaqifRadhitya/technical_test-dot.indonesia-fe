@@ -4,7 +4,7 @@ import type { zodErrorType } from "./zod-error"
 
 export type globalStateAuth = {
     isAuth: boolean
-    Logout: () => boolean
-    Login: (data: z.infer<typeof loginValidator>) => zodErrorType<typeof loginValidator> | undefined
+    Logout: () => Promise<boolean>
+    Login: (data: z.infer<typeof loginValidator>) => Promise<zodErrorType<typeof loginValidator> | undefined>
     Credential?: string
 }
