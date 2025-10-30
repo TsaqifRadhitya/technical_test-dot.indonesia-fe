@@ -34,7 +34,7 @@ export default function QuizzPage() {
       <>
         <div className={cn("flex justify-between items-center")}>
           {isLoading && (
-            <div className="animate-pulse rounded w-40 rounded-lg h-10 bg-primary/20"></div>
+            <div className="animate-pulse w-40 rounded-lg h-10 bg-primary/20"></div>
           )}
           {!isLoading && !!questions && <Timer />}
           <RestartQuizz />
