@@ -1,12 +1,12 @@
-import axios from "axios";
 import { baseRepository } from "./base.repository";
 import type { answerType, questionType } from "@/types/question";
+import { getRandomQuizzes } from "@/constants/quizz";
 
 export class quizzRepository extends baseRepository {
     async intialize(): Promise<questionType[]> {
-        const response = await axios.get("https://opentdb.com/api.php?amount=10");
-        const questions: questionType[] = response.data.results;
-        if (questions.length === 0) return Promise.reject()
+        const questions: questionType[] = await new Promise((resolve) => setTimeout(() => {
+            resolve(getRandomQuizzes(10))
+        }, 1000))
         this.setQuestions(questions);
         this.updateQuizzStatus("not started");
         return questions;
